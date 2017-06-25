@@ -1,0 +1,21 @@
+.view-blog-additional-images {
+  .views-row {
+    width:100%;
+    float: none;
+  ul {
+    padding:0;
+    margin:1px;
+    list-style-type: none;
+    li {
+      @include container();
+      text-align: center;
+      margin: .5em;
+      .field--additional-images {
+        @include breakpoint($tablet, true) {
+          @include gallery(4);
+        }
+      }
+    }
+  }
+  }
+}

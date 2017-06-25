@@ -1,0 +1,23 @@
+.pane-offers {
+  h2, h3 {
+    margin-top: 0;
+  }
+  h4 {
+    font-size: 1.2em;
+  }
+  font-size: .9em;
+  .group-left {
+    @include span(4 of 12 first);
+    background: $black;
+    color: $white;
+    text-align: center;
+  }
+  .group-right {
+    @include span(8 of 12 last);
+  }
+  .views-row {
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid black;
+  }
+}

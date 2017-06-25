@@ -1,0 +1,18 @@
+input,
+password,
+email,
+textarea {
+  color: $input--text-color;
+}
+.contact-form {
+  input,
+  textarea {
+    width:100%;
+    color:#333;
+    border-bottom:2px solid #000;
+  }
+    input[type='submit'] {
+    color: $button--text-color;
+      border:none;
+  }
+}

@@ -1,0 +1,10 @@
+footer {
+  .block--footer-box.third {
+    .block--inner {
+      text-align: center;
+      @include breakpoint($tablet-portrait) {
+        text-align: right;
+      }
+    }
+  }
+}

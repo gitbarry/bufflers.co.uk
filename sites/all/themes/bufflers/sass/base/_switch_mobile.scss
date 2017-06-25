@@ -1,0 +1,9 @@
+.mobile--no {
+  display: none;
+}
+
+@include breakpoint($mobile) {
+  .mobile--no {
+    display: block;
+  }
+}

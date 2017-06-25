@@ -1,0 +1,43 @@
+.button--soundcloud a,
+.button--twitter a,
+.button--facebook a {
+  @include button();
+}
+
+.button--soundcloud {
+
+}
+
+.button--twitter {
+
+}
+
+.button--facebook {
+
+}
+
+.book-now {
+  p {
+    margin:0;
+  }
+}
+a.button--book-now {
+  @include button();
+  @include gradient(#000, #666);
+  @include box-shadow(#999);
+  display:block;
+  font-size:1.35em;
+  padding-top: .8em;
+  margin-top:1em;
+    @include breakpoint($tablet) {
+      font-size:1.5em;
+    }
+}
+
+.pager {
+  li {
+    a {
+      @include button();
+    }
+  }
+}

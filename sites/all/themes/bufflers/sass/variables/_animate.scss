@@ -1,0 +1,81 @@
+/* Site Logo */
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes bounceIn {
+  0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.site-logo img {
+
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-name: bounceIn;
+  animation-name: bounceIn;
+}
+
+//Header Slogan
+
+//@keyframes fadeIn {
+//  0% {
+//    left: 999px;
+//    opacity: 0;
+//  }
+//  60% {
+//    left: -10px;
+//    opacity: 0.8;
+//  }
+//  100% {
+//    left: 0;
+//    opacity: 1;
+//  }
+//}
+//
+//@-webkit-keyframes fadeIn {
+//  0% {
+//    left: 999px;
+//    opacity: 0;
+//  }
+//  60% {
+//    left: -10px;
+//    opacity: 0.8;
+//  }
+//  100% {
+//    left: 0;
+//    opacity: 1;
+//  }
+//}
+//
+//.site--slogan h4 {
+//  animation-name: fadeIn;
+//  animation-duration: 1s;
+//  animation-delay: 1s;
+//  animation-fill-mode: forwards;
+//  -webkit-animation-name: fadeIn;
+//  -webkit-animation-duration: 1s;
+//  -webkit-animation-delay: 1s;
+//  -webkit-animation-fill-mode: forwards;
+//}

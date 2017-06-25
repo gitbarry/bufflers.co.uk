@@ -1,0 +1,145 @@
+// reset defaults //
+a {
+  text-decoration:none;
+  color: $body--link-color;
+    &:hover {
+      color: $body--link-color-hover;
+    }
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight:normal;
+}
+body {
+  background-color: $body--background-color;
+  line-height: $body--line-height;
+  font-family: $body--font-family;
+  margin: $body--margin-mobile;
+  color: $body--font-color;
+  @include breakpoint($desktop) {
+    margin: $body--margin-desktop;
+  }
+}
+
+// eof Set defaults */
+
+  .l-header {
+    margin: $header--margin;
+    background-color: $header--bgcolor;
+    text-align: center;
+    border-bottom: 1px solid black;
+    padding-bottom:1px;
+
+      .header--inside {
+        padding: $header--padding;
+        @include breakpoint($desktop) {
+          padding: 0 0.5em;
+        }
+      }
+
+    .l-branding {
+      .site-logo {
+        margin: 1em 0 0 0;
+        display:block;
+        text-align: center;
+        @include breakpoint($tablet) {
+          text-align: left;
+        }
+          img {
+            margin:0 auto;
+              @include breakpoint($tablet) {
+                margin:0;
+              }
+          }
+      }
+      h1.site-name {
+        margin:0;
+        padding:0;
+        height:0px;
+        overflow:hidden;
+        text-indent: -999px;
+      }
+    }
+
+      .block--search {
+        text-align: right;
+      }
+
+    .block--telephone-number {
+        margin:0 auto 2em auto;
+        @include breakpoint($tablet) {
+          margin:0;
+          float:right;
+        }
+    }
+
+    .site--slogan {
+      clear:both;
+      display:block;
+      text-align: center;
+      @include breakpoint($tablet) {
+        text-align:right;
+      }
+      .block--inner {
+        padding: 0.75em 0;
+        @include breakpoint($tablet) {
+          padding: 1.25em 0 0;
+        }
+          h4 {
+            margin:$site--slogan-margin;
+            font-size: $site--slogan-size;
+          }
+      }
+    }
+  }
+
+  .l-region--navigation {
+    background: $nav--main--bgcolor;
+    @include gradient($nav--main--bgcolor, #29363F);
+    border-bottom: 1px solid $block--border-color;
+      .menu {
+        float:right;
+      }
+  }
+  .breadcrumb {
+    display: none;
+  }
+
+  .l-main {
+    color: $content--text-color;
+    padding:0 .5em;
+    @include breakpoint($desktop) {
+      padding:0;
+    }
+  }
+  .l-footer {
+    background-color: $footer--bgcolor;
+    color: $footer--text-color;
+      .wrapper-inner {
+        padding-top: 1em;
+      }
+      @include footer-menu();
+  }
+
+  .block--user-login {
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+
+      a {
+        color: $link--column-link-color;
+        font-size: $font--size-small;
+        &:hover {
+          color: $link--column-link-color-hover;
+        }
+      }
+    }
+
+  }
+
+
+.inline {
+  display:inline-block;
+}
+
+

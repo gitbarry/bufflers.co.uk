@@ -1,0 +1,17 @@
+// Breakpoints
+$mobile: 320px;
+$tablet: 640px;
+$tablet-portrait: 768px;
+$desktop: 960px;
+
+$max-width: 1160px;
+$toggle-grid: "hide"; // "hide" || "show"
+
+// Susy
+$susy: (
+        global-box-sizing: border-box,
+        columns: 12,
+        gutters: 1/4,
+        container: $max-width
+
+);

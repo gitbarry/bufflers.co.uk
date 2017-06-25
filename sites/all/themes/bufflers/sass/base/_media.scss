@@ -1,0 +1,14 @@
+img, media {
+  max-width: 100%;
+}
+img {
+  display:block;
+}
+
+.view-blog-additional-images img {
+  border: 1px solid $black;
+  margin:.5em;
+    @include breakpoint($tablet) {
+      margin:0;
+    }
+}
