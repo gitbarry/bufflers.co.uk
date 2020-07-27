@@ -1,0 +1,10 @@
+.block--search {
+  input[type='submit'] {
+    @include button();
+  }
+  input[type='text'] {
+    padding: $input--textfield-padding;
+    @include border-radius(5px);
+    border:1px solid $input--border-color;
+  }
+}

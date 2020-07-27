@@ -1,0 +1,82 @@
+a {
+  color: $body--link-color;
+}
+.breadcrumb {
+  display:none;
+}
+.l-region--navigation {
+  @include menu();
+}
+.responsive-menus.responsified span.toggler {
+  padding:5px;
+  @include border-radius(0px);
+}
+
+.block-side-menu,
+.block--menu-menu-releases {
+  @include sideMenu();
+  font-size: $font--size-small;
+}
+
+/* Overide Superfish Menu */
+.sf-menu.sf-style-coffee li, .sf-menu.sf-style-coffee.sf-navbar {
+  background: transparent;
+}
+.sf-menu.sf-style-coffee li.sf-depth-1 a.sf-depth-1,
+.sf-menu.sf-style-coffee li.sf-depth-1 a.sf-depth-2 {
+  color:white;
+  border:none;
+  @include head-font();
+  &:hover {
+    background: #333;
+    transition-property: background;
+    transition-duration: 1s;
+  }
+}
+
+.sf-menu.sf-style-coffee li.sf-depth-1 a.sf-depth-2 {
+  font-family: $body--font-two;
+}
+
+.sf-menu.sf-style-coffee li:hover, .sf-menu.sf-style-coffee li.sfHover, .sf-menu.sf-style-coffee li.active a, .sf-menu.sf-style-coffee a:focus, .sf-menu.sf-style-coffee a:hover, .sf-menu.sf-style-coffee a:active, .sf-menu.sf-style-coffee.sf-navbar li li {
+  background: transparent;
+  .sf-menu.sf-style-coffee a {
+    border-top: none;
+    color: $nav--main--color;
+    font-weight:normal;
+    font-size: $nav--main-text-size;
+    border:none;
+    @include head-font();
+      &:hover {
+        background: #000;
+      }
+  }
+}
+
+.sf-menu.sf-style-coffee li.first .sf-menu.sf-style-coffee a {
+  border-left: none;
+  @include head-font();
+}
+
+/* Sub Menus */
+.sf-menu.sf-style-coffee li li li {
+  background: #29363F;
+    &:hover {
+      background: #29363F;
+    }
+}
+
+.tabs a {
+  color:black;
+}
+
+.menu-footer {
+  color: white;
+}
+
+.l-region--footer-box-3 a {
+  color:#fff;
+    &:hover {
+      text-decoration: underline;
+    }
+}

@@ -1,0 +1,68 @@
+input[type='text'],
+input[type='password'],
+input[type='email'] {
+  @include border-radius(3px);
+  border:1px solid $input--border-color;
+  padding: $input--padding;
+}
+input[type='submit'] {
+  @include button();
+}
+
+.webform-client-form div:first-child {
+
+
+    .form-item.webform-component {
+      input,
+      password,
+      textarea {
+        width:100%;
+      }
+      input[type='checkbox'],
+      input[type='radio']{
+      width: auto;
+    }
+
+      input[type='image'] {
+        width:30%;
+        @include breakpoint($tablet) {
+          width: auto;
+        }
+      }
+  }
+
+  .form-item.form-type-checkbox {
+    display: block;
+      @include breakpoint($tablet) {
+        display: inline-block;
+      }
+  }
+
+  .webform-component-fieldset {
+    margin-bottom: $v-space*2;
+    background: $theme-grey;
+    legend {
+      @include theme-gradient();
+      border: 0 none;
+      color: white;
+      padding: .25em 1em;
+      margin:0 0 1em;
+    }
+  }
+
+  .webform-component-fieldset.two-col .fieldset-wrapper {
+    @include container();
+
+      .form-item.webform-component {
+        @include breakpoint($tablet) {
+          @include gallery(6);
+        }
+      }
+  }
+
+  .form-actions,
+  .webform-component-fieldset {
+    clear:both;
+
+  }
+}

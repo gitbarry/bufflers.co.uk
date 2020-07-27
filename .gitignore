@@ -1,3 +1,12 @@
-sites/default
-.idea/
+# Ignore configuration files that may contain sensitive information.
+sites/*/settings*.php
+
+# Ignore paths that contain user-generated content.
+sites/*/files
+sites/*/private
 .DS_Store
+.editorconfig
+.ftpquota
+sites/default
+sites/all/themes/bufflers/node_modules/
+sites/all/.DS_Store

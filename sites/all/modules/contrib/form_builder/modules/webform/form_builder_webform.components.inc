@@ -5,21 +5,16 @@
  *   Default webform component callbacks for functionality related to the Form Builder.
  */
 
+use Drupal\form_builder\Loader;
+use Drupal\form_builder_webform\HiddenElement;
+
 /**
  * Configuration form for the "unique" property.
  */
-function form_builder_webform_property_unique_form(&$form_state, $form_type, $element, $property) {
-  $component = &$element['#webform_component'];
-  $form = array();
-
+function form_builder_webform_property_unique_form($component, $edit, &$form_state, $property) {
   $form['unique'] = array(
     '#form_builder' => array('property_group' => 'validation'),
-    '#title' => t('Unique'),
-    '#description' => t('Check that all entered values for this field are unique. The same value is not allowed to be used twice.'),
-    '#type' => 'checkbox',
-    '#default_value' => $component['extra']['unique'],
-  );
-
+  ) + $edit['validation']['unique'];
   return $form;
 }
 
@@ -290,6 +285,22 @@ function _form_builder_webform_form_builder_map_grid() {
   return array(
     'form_builder_type' => 'grid',
     'properties' => array(
+      'custom_grid_option_keys' => array(
+        'storage_parents' => array('extra', 'custom_option_keys'),
+      ),
+      'custom_grid_question_keys' => array(
+        'storage_parents' => array('extra', 'custom_question_keys'),
+      ),
+      'grid_options' => array(
+        'storage_parents' => ['extra', 'options'],
+        'form_parents' => ['options'],
+        'property_group' => 'options',
+      ),
+      'grid_questions' => array(
+        'storage_parents' => ['extra', 'questions'],
+        'form_parents' => ['questions'],
+        'property_group' => 'options',
+      ),
       'optrand' => array(
         'form_parents' => array('display', 'optrand'),
         'storage_parents' => array('extra', 'optrand'),
@@ -311,11 +322,9 @@ function _form_builder_webform_form_builder_map_grid() {
 function _form_builder_webform_form_builder_properties_grid() {
   return array(
     'grid_options' => array(
-      'form' => 'form_builder_webform_property_grid_options_form',
       'submit' => array('form_builder_webform_property_grid_form_submit'),
     ),
     'grid_questions' => array(
-      'form' => 'form_builder_webform_property_grid_questions_form',
       'submit' => array('form_builder_webform_property_grid_form_submit'),
     ),
     'unique' => array(
@@ -325,54 +334,17 @@ function _form_builder_webform_form_builder_properties_grid() {
 }
 
 /**
- * Implements _form_builder_webform_form_builder_save_component().
- */
-function _form_builder_webform_form_builder_save_grid($component, $form_element) {
-  $component['extra']['options'] = _webform_select_options_to_text($component['extra']['options']);
-  $component['extra']['questions'] = _webform_select_options_to_text($component['extra']['questions']);
-  $component['extra'] += array(
-    'custom_option_keys' => FALSE,
-    'custom_question_keys' => FALSE,
-  );
-
-  return $component;
-}
-
-/**
- * Configuration form for the "grid_options" property.
- */
-function form_builder_webform_property_grid_options_form(&$form_state, $form_type, $element) {
-  $component = &$element['#webform_component'];
-  $form = _form_builder_webform_build_edit_form('grid', $element, 'grid_options', 'options', array('options'), array('extra', 'options'));
-  // The _form_builder_webform_build_edit_form() function can only pull in one
-  // property at a time, so we have to set the key toggle manually.
-  $form['grid_options']['options']['#key_type_toggled'] = !empty($component['extra']['custom_option_keys']);
-  return $form;
-}
-
-/**
- * Configuration form for the "grid_questions" property.
- */
-function form_builder_webform_property_grid_questions_form(&$form_state, $form_type, $element) {
-  $component = &$element['#webform_component'];
-  $form = _form_builder_webform_build_edit_form('grid', $element, 'grid_questions', 'options', array('questions'), array('extra', 'questions'));
-  // The _form_builder_webform_build_edit_form() function can only pull in one
-  // property at a time, so we have to set the key toggle manually.
-  $form['grid_questions']['options']['#key_type_toggled'] = !empty($component['extra']['custom_question_keys']);
-  return $form;
-}
-
-/**
  * Submit handler for the "grid_options" and "grid_questions" properties.
  */
 function form_builder_webform_property_grid_form_submit(&$form, &$form_state) {
+  // _webform_edit_validate_options() hardcodes the #parents for values.
   if (empty($form_state['values']['grid_options'])) {
-    $form_state['values']['grid_options'] = _webform_select_options_from_text($form_state['values']['extra']['grid_options']);
+    $form_state['values']['grid_options'] = $form_state['values']['extra']['grid_options'];
     $form_state['values']['custom_grid_option_keys'] = $form_state['values']['extra']['custom_grid_option_keys'];
   }
 
   if (empty($form_state['values']['grid_questions'])) {
-    $form_state['values']['grid_questions'] = _webform_select_options_from_text($form_state['values']['extra']['grid_questions']);
+    $form_state['values']['grid_questions'] = $form_state['values']['extra']['grid_questions'];
     $form_state['values']['custom_grid_question_keys'] = $form_state['values']['extra']['custom_grid_question_keys'];
   }
 }
@@ -395,25 +367,14 @@ function _form_builder_webform_form_builder_types_hidden() {
   $fields['hidden'] = array(
     'title' => t('Hidden'),
     'weight' => 8,
+    'class' => HiddenElement::class,
   );
   $component['name'] = t('New hidden');
-  $fields['hidden']['default'] = _form_builder_webform_default('hidden', array(), $component);
+  $fields['hidden']['default'] = _form_builder_webform_default('hidden', array(
+    'hidden_type' => 'hidden',
+  ), $component);
 
   return $fields;
-}
-
-/**
- * Implements _form_builder_webform_form_builder_load_component().
- */
-function _form_builder_webform_form_builder_load_hidden($form_element) {
-  // Hidden elements may be #type "value" or "hidden". Set the internal property
-  // to keep track of hidden fields.
-  $form_element['#form_builder']['element_type'] = 'hidden';
-  if (!isset($form_element['#default_value'])) {
-    $form_element['#default_value'] = $form_element['#value'];
-  }
-
-  return $form_element;
 }
 
 /**
@@ -424,14 +385,18 @@ function _form_builder_webform_form_builder_preview_alter_hidden($form_element) 
   $form_element['#type'] = 'markup';
   $form_element['#form_builder']['element_type'] = 'markup';
   unset($form_element['#theme']);
-
-  // Add the 'webform_element' theme wrapper at the beginning, where it would
-  // normally be.
-  array_unshift($form_element['#theme_wrappers'], 'webform_element');
+  $c = $form_element['#webform_component'];
+  if ($c['extra']['hidden_type'] == 'value') {
+    array_unshift($form_element['#theme_wrappers'], 'webform_element');
+  }
+  else {
+    unset($form_element['#wrapper_attributes']);
+  }
 
   // Display the title of the hidden field as regular markup.
-  $form_element['#children'] = t('@title - <em>hidden field</em>', array('@title' => $form_element['#title']));
-  $form_element['#title'] = NULL;
+  $v['@title'] = $c['name'];
+  $v['@type'] = $c['extra']['hidden_type'] == 'value' ? 'secure' : 'insecure - editable by JavaScript';
+  $form_element['#children'] = t('@title - <em>hidden field (@type)</em>', $v);
 
   return $form_element;
 }
@@ -465,7 +430,8 @@ function _form_builder_webform_form_builder_types_markup() {
   );
   $component['name'] = t('New markup');
   $component['value'] = $default;
-  $fields['markup']['default'] = _form_builder_webform_default('markup', array(), $component);
+  $extras['format'] = filter_default_format($GLOBALS['user']);
+  $fields['markup']['default'] = _form_builder_webform_default('markup', $extras, $component);
 
   return $fields;
 }
@@ -631,28 +597,18 @@ function _form_builder_webform_form_builder_types_pagebreak() {
 }
 
 /**
- * Implements _form_builder_webform_form_builder_load_component().
- */
-function _form_builder_webform_form_builder_load_pagebreak($form_element) {
-  // Pagebreak components are rendered as hidden elements by webform, but
-  // hidden elements do not have a #title property. So we have to convert the
-  // rendered value to be used as the #title instead.
-  $form_element['#title'] = $form_element['#value'];
-  $form_element['#form_builder']['element_type'] = 'pagebreak';
-
-  return $form_element;
-}
-
-/**
  * Implements _form_builder_webform_form_builder_save_component().
+ *
+ * @todo make this actually work.
  */
 function _form_builder_webform_form_builder_save_pagebreak($component, $form_element) {
   // Ensure pagebreaks are saved at the root level.
   if ($component['pid'] !== 0) {
     drupal_set_message(t('Page breaks may not be nested inside fieldsets. Each pagebreak has been moved outside of fieldsets.'), 'status', FALSE);
 
-    $form_cache = form_builder_cache_load('webform', $form_element['#form_builder']['form_id']);
-    $parent = form_builder_get_element($form_cache, $form_element['#form_builder']['parent_id']);
+    $parent = Loader::instance()
+      ->fromCache('webform', $form_element['#form_builder']['form_id'])
+      ->getElementArray($form_element['#form_builder']['parent_id']);
 
     $component['weight'] = $parent['#weight'] + 1;
     $component['pid'] = 0;
@@ -675,7 +631,7 @@ function _form_builder_webform_form_builder_preview_alter_pagebreak($form_elemen
   array_unshift($form_element['#theme_wrappers'], 'webform_element');
 
   // Display the title of the pagebreak field as regular markup.
-  $form_element['#children'] = '--- ' . check_plain($form_element['#title']) . ' ---';
+  $form_element['#children'] = '--- ' . check_plain($form_element['#webform_component']['name']) . ' ---';
   $form_element['#children'] .= '<div class="description">' . t('(Fields below will be displayed on a new page)') . '</div>';
   $form_element['#title_display'] = 'none';
 
@@ -963,20 +919,6 @@ function _form_builder_webform_form_builder_map_time() {
  */
 
 /**
- * Helper function; Generate a configuration form based on a map.
- */
-function _form_builder_webform_mapped_form(&$form_state, $form_type, $element, $property) {
-  $form = array();
-  if ($component_type = $element['#webform_component']['type']) {
-    if ($map = _form_builder_webform_property_map($component_type)) {
-      $property_group = isset($map['properties'][$property]['property_group']) ? $map['properties'][$property]['property_group'] : reset($map['properties'][$property]['form_parents']);
-      $form = _form_builder_webform_build_edit_form($component_type, $element, $property, $property_group, $map['properties'][$property]['form_parents']);
-    }
-  }
-  return $form;
-}
-
-/**
  * Helper function; Alter a form element upon load based on a map.
  */
 function _form_builder_webform_set_mapped_type($element) {
@@ -1003,7 +945,6 @@ function _form_builder_webform_default($component_type, $merge_extras = array(),
   webform_component_defaults($component);
   $component['extra'] = array_merge($component['extra'], $merge_extras);
   $component = array_merge($component, $merge_component);
-  $default_element = webform_component_invoke($component_type, 'render', $component, NULL, FALSE);
   $default_element['#webform_component'] = $component;
 
   // Call the loading function to make sure that the default element gets the
@@ -1017,62 +958,43 @@ function _form_builder_webform_default($component_type, $merge_extras = array(),
 }
 
 /**
- * Helper function; builds a form for editing part of a webform component.
+ * Helper function; Generate a configuration form based on a map.
  *
  * The returned form is derived from a subcomponent of the component form
  * provided by the Webform module.
  *
- * @param $component_type
- *   The webform component type to be edited.
- * @param $element
- *   A form array representing the element whose configuration form we are
- *   building.
+ * @param $component
+ *   The webform component to be edited.
+ * @param $edit
+ *   The webform component edit form as produced by webform itself.
  * @param $property
  *   The property of $element which stores the state of portions of the webform
  *   component that this form is responsible for configuring. The property
  *   should be passed in without the leading "#".
- * @param $form_builder_property_group
- *   The Form Builder property group in which this configuration form should be
- *   displayed.
- * @param $form_nested_keys
- *   An array of nested keys representing the location of the subcomponent of
- *   the _webform_edit_[component]() form that this configuration form will be
- *   taken from. For example, if the part of the configuration form we are
- *   interested in is located in $form['display']['width'], where $form is the
- *   output of _webform_edit_[component](), we would pass
- *   array('display', 'width') in for this parameter.
- * @param $component_nested_keys
- *   An array of nested keys representing the location of the portions of the
- *   webform component that this form is responsible for configuring. For
- *   example, if this form configures the data that is stored in
- *   $component['extra']['filtering'], where $component has the structure of
- *   the array returned by _webform_defaults_[component](), we would pass
- *   array('extra', 'filtering') in for this parameter.
+ * @param array $map
+ *   The mapping data for this webform component. Including:
+ *   - form_parents: An array of nested keys representing the location of the
+ *     subcomponent of the _webform_edit_[component]() form that this
+ *     configuration form will be taken from. For example ['display', 'with'] to
+ *     get $form['display']['with'] fromm _webform_edit_[component]().
+ *   - property_group: Controls in which tab of the configuration form the
+ *     property will be shown.
+ *   - weight: Override the #weight of the property form element.
  *
- * @return
- *   A form array that can be used to edit the specified part of the webform
- *   component represented by $element.
+ * @return array
+ *   Part of the webform component edit form as specified in
+ *   `$map['form_parents']` prepared for being used in a form_builder configure
+ *   form.
  */
-function _form_builder_webform_build_edit_form($component_type, $element, $property, $form_builder_property_group, $form_nested_keys) {
-  module_load_include('inc', 'webform', 'includes/webform.components');
-
-  // The Webform module stores existing component data as part of the passed-in
-  // element. If the component doesn't exist yet, initialize a default
-  // component.
-  $defaults_function = '_webform_defaults_' . $component_type;
-  $component = isset($element['#webform_component']) ? $element['#webform_component'] : $defaults_function();
-  $nid = isset($component['nid']) ? $component['nid'] : NULL;
-
-  // Build the entire _webform_edit_file() form based on the current state of
-  // the component, and obtain the slice of it that we want.
-  $empty_form = array();
-  $empty_form_state = form_state_defaults();
-
-  // The full node is needed here so that the "private" option can be access
-  // checked.
-  $node = !isset($nid) ? (object) array('nid' => NULL, 'webform' => webform_node_defaults()) : node_load($nid);
-  $form = webform_component_edit_form($empty_form, $empty_form_state, $node, $component);
-  $form = drupal_array_get_nested_value($form, $form_nested_keys);
+function _form_builder_webform_mapped_form($component, $edit, &$form_state, $property) {
+  if (!(($component_type = $component['type']) && ($map = _form_builder_webform_property_map($component_type)))) {
+    return [];
+  }
+  $map = $map['properties'][$property];
+  $map += [
+    'property_group' => reset($map['form_parents']),
+  ];
+  $form = drupal_array_get_nested_value($edit, $map['form_parents']);
 
   // Force the form to have a consistent #tree structure so it will appear in
   // $form_state['values'] the way we want.
@@ -1080,13 +1002,18 @@ function _form_builder_webform_build_edit_form($component_type, $element, $prope
 
   // Indicate the Form Builder property group that this form will be displayed
   // in.
-  if ($form_builder_property_group) {
-    $form['#form_builder']['property_group'] = $form_builder_property_group;
+  if (!empty($map['property_group'])) {
+    $form['#form_builder']['property_group'] = $map['property_group'];
+  }
+
+  // Allow overriding the weight via the map.
+  if (isset($map['weight'])) {
+    $form['#weight'] = $map['weight'];
   }
 
   // Return the form, keyed by the name of the property that is being
   // configured.
-  return array($property => $form);
+  return [$property => $form];
 }
 
 /**

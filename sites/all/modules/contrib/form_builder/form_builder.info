@@ -1,13 +1,14 @@
 name = Form builder
 description = Form building framework.
-dependencies[] = options_element
 core = 7.x
+php = 7.0
 
-files[] = 'form_builder.classes.inc'
+dependencies[] = ctools
+dependencies[] = options_element
+dependencies[] = psr0:psr0
 
-; Information added by Drupal.org packaging script on 2015-05-18
-version = "7.x-1.9"
+; Information added by Drupal.org packaging script on 2019-12-17
+version = "7.x-2.0-alpha7"
 core = "7.x"
 project = "form_builder"
-datestamp = "1431954049"
-
+datestamp = "1576598298"

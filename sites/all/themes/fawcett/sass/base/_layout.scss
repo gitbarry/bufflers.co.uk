@@ -1,0 +1,157 @@
+.l-region--sidebar-first {
+  display:none;
+}
+
+.l-content {
+  @include span(12 of 12);
+}
+
+.l-region--sidebar-second {
+  display:none;
+}
+
+.l-header {
+  .header--inside {
+    @include container();
+      .l-branding,
+      .l-region--header {
+        @include span(12);
+      }
+
+    @include breakpoint($tablet) {
+      .l-branding {
+        @include span(4 first);
+      }
+      .l-region--header {
+        @include span(7 at 8 last);
+      }
+    }
+  }
+}
+
+  .l-region--navigation,
+  .l-region--navigation {
+    .block--menu-block {
+      @include container();
+    }
+  }
+  .block--superfish,
+  .main-menu {
+    @include container();
+  }
+
+  .l-page {
+
+  }
+
+  .l-content {
+    @include container();
+  }
+  .l-main {
+    @include container();
+  }
+
+  .l-region--sidebar-first {
+    @include span(3 of 12 at 1 first);
+  }
+
+  .l-content {
+    @include span(12);
+  }
+.panel-2col .panel-col-first {
+    @include breakpoint($tablet) {
+      @include span(8 first);
+    }
+  }
+
+.l-content {
+  @include span(12);
+  @include container();
+
+  .panel-col-first,
+  .panel-col-last {
+    width: 100%;
+    display: block;
+  }
+
+  @include breakpoint($tablet) {
+    .panel-col-first {
+      @include span(8 first);
+    }
+
+    .panel-col-last {
+      @include span(4 at 9 last);
+    }
+  }
+}
+
+.view-slider .views-row {
+  width: 100%;
+  float:none;
+}
+
+  .l-region--sidebar-first,
+  .l-region--sidebar-second {
+    display:inline-block;
+  }
+
+
+  .l-footer {
+    .wrapper-inner {
+      @include container();
+        .block--footer-box {
+
+          @include breakpoint($tablet) {
+            @include gallery(4);
+          }
+        }
+      .block--footer-box.second {
+        img {
+          margin:0 auto;
+        }
+      }
+      .block--footer-box.third {
+        display: none;
+        @include breakpoint($tablet) {
+          display: block;
+        }
+      }
+    }
+  }
+
+.mobile--hide-block {
+  display: none;
+  @include breakpoint($tablet) {
+    display: block;
+  }
+}
+
+.mobile--hide-inline-block {
+  display: none;
+  @include breakpoint($tablet) {
+    display: inline-block;
+  }
+}
+
+.mobile--hide-inline {
+  display: none;
+  @include breakpoint($tablet) {
+    display: inline;
+  }
+}
+
+.mobile--only-block {
+  display: block;
+  @include breakpoint($tablet) {
+    display: none;
+  }
+}
+
+.mobile--only-inline-block {
+  display: inline-block;
+  @include breakpoint($tablet) {
+    display: none;
+  }
+}
+
+
